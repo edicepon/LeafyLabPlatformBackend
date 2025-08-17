@@ -65,50 +65,116 @@ export default function DirectPredictionPage() {
         setTableRows(newData);
     }
     const generateTableData = (data: any) => {
-        const results = data?.predictions || []
-        let columns = [] as TableColumnsType
-        const rows = [] as Record<string, any>[]
-        results.forEach((result: any) => {
-            const predictions = result?.predictions || {}
-            const { materials = {}, parameters = {} } = result?.inputs || {}
-            const inputs = {
-                ...materials,
-                ...parameters
-            }
-            if (columns.length === 0) {
-                columns = Object.keys(predictions).map((key: string) => ({
+        const results = data?.predictions || [];
+
+        // Record the current number of rows to assign unique incremental keys
+        const startIndex = tableRows.length;
+
+        // If table columns have not been set yet, use the first prediction to define them
+        if (tableColumns.length === 0 && results.length > 0) {
+            const first = results[0];
+            const firstPreds = first?.predictions || {};
+            const cols: TableColumnsType = Object.keys(firstPreds).map((key: string) => {
+                console.log("Current key:", key);   
+                return {
                     title: key === '_uncertainty' ? 'Model Uncertainty' : key,
                     dataIndex: key,
-                    render: (text, record) => <span key={record.key}>{isNaN(text) ? text : text.toFixed(2) }</span>
-                }))
+                    render: (text, record) => (
+                        <span key={record.key}>
+                            {typeof text === 'boolean'
+                                ? (text ? 'True' : 'False')
+                                : isNaN(text) || text === null
+                                    ? 'N/A'
+                                    : text.toFixed(2)}
+                        </span>
+                    ),
+                };
+                });
+            setTableColumns(cols);
+        }
+
+        const newRows: Record<string, any>[] = [];
+        const newExpandRows: Record<string, any>[] = [];
+
+        results.forEach((result: any, i: number) => {
+            const predictions = result?.predictions || {};
+            const { materials = {}, parameters = {} } = result?.inputs || {};
+            const inputs = { ...materials, ...parameters };
+
+            const rowKey = startIndex + i; // Ensure each row has a unique key
+
+            // Only initialize expandable row columns once, if not already set
+            if (expandColumns.current.length === 0 && Object.keys(inputs).length > 0) {
+            expandColumns.current = Object.keys(inputs).map((k, idx) => ({
+                title: k,
+                dataIndex: k,
+                key: idx,
+            }));
             }
-            if (expandColumns.current.length === 0) {
-                expandColumns.current = Object.keys(inputs).map((key: string, index: number) => ({
-                    title: key,
-                    dataIndex: key,
-                    key: expandColumns.current.length + index,
-                }))
-            }
+
             if (Object.keys(inputs).length > 0) {
-                expandDataSource.current.push({
-                    ...inputs,
-                    key: tableRows.length + 1
-                })
+            newExpandRows.push({ ...inputs, key: rowKey });
             }
             if (Object.keys(predictions).length > 0) {
-                rows.push({
-                    ...predictions,
-                    key: tableRows.length + 1
-                })
+            newRows.push({ ...predictions, key: rowKey });
             }
-        })
-        setTableColumns(prev => {
-            return prev.concat(columns)
-        })
-        setTableRows(prev => {
-            return prev.concat(rows)
-        })
-    }
+        });
+
+        // Append new rows to the table without modifying existing columns
+        expandDataSource.current = expandDataSource.current.concat(newExpandRows);
+        setTableRows(prev => prev.concat(newRows));
+        };
+
+    // const generateTableData = (data: any) => {
+    //     console.log("response data:", data)
+    //     const results = data?.predictions || []
+    //     let columns = [] as TableColumnsType
+    //     const rows = [] as Record<string, any>[]
+    //     results.forEach((result: any) => {
+    //         const predictions = result?.predictions || {}
+    //         const { materials = {}, parameters = {} } = result?.inputs || {}
+    //         const inputs = {
+    //             ...materials,
+    //             ...parameters
+    //         }
+    //         if (columns.length === 0) {
+    //             columns = Object.keys(predictions).map((key: string) => ({
+    //                 title: key === '_uncertainty' ? 'Model Uncertainty' : key,
+    //                 dataIndex: key,
+    //                 render: (text, record) => (
+    //                     <span key={record.key}>
+    //                         {typeof text === 'boolean' ? (text ? 'True' : 'False') : isNaN(text) || text === null ? 'N/A' : text.toFixed(2)}
+    //                     </span>
+    //                 )
+    //             }))
+    //         }
+    //         if (expandColumns.current.length === 0) {
+    //             expandColumns.current = Object.keys(inputs).map((key: string, index: number) => ({
+    //                 title: key,
+    //                 dataIndex: key,
+    //                 key: expandColumns.current.length + index,
+    //             }))
+    //         }
+    //         if (Object.keys(inputs).length > 0) {
+    //             expandDataSource.current.push({
+    //                 ...inputs,
+    //                 key: tableRows.length + 1
+    //             })
+    //         }
+    //         if (Object.keys(predictions).length > 0) {
+    //             rows.push({
+    //                 ...predictions,
+    //                 key: tableRows.length + 1
+    //             })
+    //         }
+    //     })
+    //     setTableColumns(prev => {
+    //         return prev.concat(columns)
+    //     })
+    //     setTableRows(prev => {
+    //         return prev.concat(rows)
+    //     })
+    // }
 
     const validateForm = (formData: FormData) => {
         //#1. Check formulation is === 100
@@ -211,24 +277,24 @@ export default function DirectPredictionPage() {
                         <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)} placement="topLeft">
                             <a className="text-sky-600 hover:text-sky-800 dark:text-sky-400 dark:hover:text-sky-300 cursor-pointer underline hover:no-underline transition-colors">Delete</a>
                         </Popconfirm>
-                        <a href={`/views/heatmap?${searchParamsString}`} className="text-sky-600 hover:text-sky-800 dark:text-sky-400 dark:hover:text-sky-300 cursor-pointer underline hover:no-underline transition-colors">Copy inputs to Heatmap</a>
+                        {/* <a href={`/views/heatmap?${searchParamsString}`} className="text-sky-600 hover:text-sky-800 dark:text-sky-400 dark:hover:text-sky-300 cursor-pointer underline hover:no-underline transition-colors">Copy inputs to Heatmap</a> */}
                     </div>
             )}
         },
     ]
     return (
         <>
-            <Title text="Single-Point Property Prediction" actions={[{type: ActionEnum.SELECT_TEMPLATE, label: 'Select Template File', handler: handleTemplateChange}]}/>
+            <Title text="Forward Prediction" actions={[{type: ActionEnum.SELECT_TEMPLATE, label: 'Select Template File', handler: handleTemplateChange}]}/>
             <form onSubmit={onSubmit} className="space-y-6">
                 {isTemplateLoading ? (
                     <SkeletonCard />
                 ) : (
                     <TemplateForm
-                      formulationInputTitle="Section I – Formulation Parameter Inputs"
-                      processInputTitle="Section II – Process Parameter Inputs"
+                      formulationInputTitle="Section I – Composition Parameter Inputs"
+                      processInputTitle="Section II – Fabrication Parameter Inputs"
                       processInputSubTitle="Processing Parameters"
                       formulationInputTitleConfig={{
-                          compositionInputTitle: "Formulation Parameters",
+                          compositionInputTitle: "Composition Parameters",
                       }} isSelectable={false} />
                 )}
                 <Button

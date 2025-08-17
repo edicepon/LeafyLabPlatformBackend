@@ -284,9 +284,9 @@ export default function DirectPredictionPage() {
                                             Delete
                                         </button>
                                     </ConfirmationDialog>
-                                    <a href={`/materials/heatmap?${searchParamsString}`} className="text-sky-600 hover:text-sky-800 dark:text-sky-400 dark:hover:text-sky-300 cursor-pointer underline hover:no-underline transition-colors">
+                                    {/* <a href={`/materials/heatmap?${searchParamsString}`} className="text-sky-600 hover:text-sky-800 dark:text-sky-400 dark:hover:text-sky-300 cursor-pointer underline hover:no-underline transition-colors">
                                         Copy inputs to Heatmap
-                                    </a>
+                                    </a> */}
                                 </div>
                             )
                         }

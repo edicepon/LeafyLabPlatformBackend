@@ -162,9 +162,13 @@ function CompositionInput({ title = "", removeCompositionIndicator = false }: { 
                             }
                         })()}
                     </div>
-                    <div className="text-xs [&_span]:block absolute bottom-0">
-                        <span>UL: Upper Limit</span>
-                        <span>LL: Lower Limit</span>
+                <div className="text-xs [&_span]:block absolute bottom-0 right-0">
+                        <span>tMXene: Ti₃C₂Tₓ MXene</span>
+                        <span>SWNT: Single-Walled Carbon Nanotube</span>
+                        <span>AuNP: Gold Nanoparticle</span>
+                        <span>PVA: Polyvinyl Alcohol</span>
+                        <span>UL: Upper Limit (wt. %)</span>
+                        <span>LL: Lower Limit (wt. %)</span>
                     </div>
                 </div>
             <div className="px-5 py-1 col-span-4 xl:col-span-5 ">
