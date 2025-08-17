@@ -294,7 +294,7 @@ export default function InverseDesignPage() {
                             <a className="text-sky-600 hover:text-sky-800 dark:text-sky-400 dark:hover:text-sky-300 cursor-pointer underline hover:no-underline transition-colors">Delete</a>
                         </Popconfirm>
                         <a href={`/views/direct-prediction?${searchParamsString}`} className="text-sky-600 hover:text-sky-800 dark:text-sky-400 dark:hover:text-sky-300 cursor-pointer underline hover:no-underline transition-colors">Copy inputs to Prediction</a>
-                        <a href={`/views/heatmap?${searchParamsString}`} className="text-sky-600 hover:text-sky-800 dark:text-sky-400 dark:hover:text-sky-300 cursor-pointer underline hover:no-underline transition-colors">Copy inputs to Heatmap</a>
+                        {/* <a href={`/views/heatmap?${searchParamsString}`} className="text-sky-600 hover:text-sky-800 dark:text-sky-400 dark:hover:text-sky-300 cursor-pointer underline hover:no-underline transition-colors">Copy inputs to Heatmap</a> */}
                     </div>
             )}
         },
@@ -303,7 +303,7 @@ export default function InverseDesignPage() {
     return (
         <>
             <Title text="Inverse Design Engine" actions={[{type: ActionEnum.SELECT_TEMPLATE, label: 'Select Template File', handler: handleTemplateChange}]}/>
-            <CollapsibleWrapper title="Section I – Define Formulation Parameter Ranges">
+            {/* <CollapsibleWrapper title="Section I – Define Formulation Parameter Ranges">
             {
                 isLoading ? (
                     <div className="bg-white dark:bg-gray-800 shadow-sm rounded-xl p-6">
@@ -461,8 +461,8 @@ export default function InverseDesignPage() {
                     </div>
                 )
             }
-            </CollapsibleWrapper>
-            <CollapsibleWrapper title="Section III – Provide Detailed Product Specifications">
+            </CollapsibleWrapper> */}
+            <CollapsibleWrapper title="Section I – Provide Detailed Product Specifications">
             {
                 isLoading ? (
                     <div className="bg-white dark:bg-gray-800 shadow-sm rounded-xl p-6">
@@ -537,7 +537,7 @@ export default function InverseDesignPage() {
                 )
             }
             </CollapsibleWrapper>
-            <CollapsibleWrapper title="Section IV – Determine Model Output Display and Set Uncertainty Cutoff">
+            <CollapsibleWrapper title="Section II – Determine Model Output Display and Set Uncertainty Cutoff">
                 <div className="flex flex-col gap-y-6">
                     {outputDisplayOptions?.length > 0 &&
                         <div className="flex items-center">

@@ -101,7 +101,9 @@ export default function InverseDesignPage() {
     }, [parameters])
 
     const memoizedOutputParams = useMemo(() => {
-        return outputs.reduce((acc: Record<string, Record<string, number | string[]>>, output) => {
+        return outputs
+            .filter(output => output.featureKey !== 'Model Uncertainty')
+            .reduce((acc: Record<string, Record<string, number | string[]>>, output) => {
             if (output.type === 'cat') {
                 acc[output.featureKey] = {
                     choices: output.options
@@ -117,12 +119,14 @@ export default function InverseDesignPage() {
     }, [outputs])
 
     const memoizedOutputDisplayOptions = useMemo(() => {
-        return outputs.map(output => ({
+        return outputs
+        .filter(output => !['Feasibility'].includes(output.featureKey))
+        .map(output => ({
             id: output.featureKey,
             label: output.label,
             value: output.featureKey
         }))
-    }, [outputs])
+    }, [outputs]);
 
     const memoizedOutputDisplay = useMemo(() => {
         return [outputs[0]?.featureKey || '', outputs[1]?.featureKey || '']
@@ -296,7 +300,7 @@ export default function InverseDesignPage() {
                             <a className="text-sky-600 hover:text-sky-800 dark:text-sky-400 dark:hover:text-sky-300 cursor-pointer underline hover:no-underline transition-colors">Delete</a>
                         </Popconfirm>
                         <a href={`/views/direct-prediction?${searchParamsString}`} className="text-sky-600 hover:text-sky-800 dark:text-sky-400 dark:hover:text-sky-300 cursor-pointer underline hover:no-underline transition-colors">Copy inputs to Prediction</a>
-                        <a href={`/views/heatmap?${searchParamsString}`} className="text-sky-600 hover:text-sky-800 dark:text-sky-400 dark:hover:text-sky-300 cursor-pointer underline hover:no-underline transition-colors">Copy inputs to Heatmap</a>
+                        {/* <a href={`/views/heatmap?${searchParamsString}`} className="text-sky-600 hover:text-sky-800 dark:text-sky-400 dark:hover:text-sky-300 cursor-pointer underline hover:no-underline transition-colors">Copy inputs to Heatmap</a> */}
                     </div>
             )}
         },
@@ -307,8 +311,8 @@ export default function InverseDesignPage() {
     return (
         <TooltipProvider>
         <>
-            <Title text="Inverse Design Engine" actions={[{type: ActionEnum.SELECT_TEMPLATE, label: 'Select Template File', handler: handleTemplateChange}]}/>
-            <CollapsibleWrapper title="Section I – Define Formulation Parameter Ranges">
+            <Title text="Inverse Design" actions={[{type: ActionEnum.SELECT_TEMPLATE, label: 'Select Template File', handler: handleTemplateChange}]}/>
+            {/* <CollapsibleWrapper title="Section I – Define Formulation Parameter Ranges">
             {
                 isLoading ? (
                     <div className="bg-white dark:bg-gray-800 shadow-sm rounded-xl p-6">
@@ -466,8 +470,8 @@ export default function InverseDesignPage() {
                     </div>
                 )
             }
-            </CollapsibleWrapper>
-            <CollapsibleWrapper title="Section III – Provide Detailed Product Specifications">
+            </CollapsibleWrapper> */}
+            <CollapsibleWrapper title="Section I – Provide Detailed Product Specifications">
             {
                 isLoading ? (
                     <div className="bg-white dark:bg-gray-800 shadow-sm rounded-xl p-6">
@@ -542,7 +546,7 @@ export default function InverseDesignPage() {
                 )
             }
             </CollapsibleWrapper>
-            <CollapsibleWrapper title="Section IV – Determine Model Output Display and Set Uncertainty Cutoff">
+            <CollapsibleWrapper title="Section II – Determine Model Output Display and Set Uncertainty Cutoff">
                 <div className="flex flex-col gap-y-6">
                     {outputDisplayOptions?.length > 0 &&
                         <div className="flex items-center">
@@ -550,14 +554,14 @@ export default function InverseDesignPage() {
                             <div className="flex items-center gap-x-6">
                                 <div className="flex items-center gap-x-2">
                                     <span>X </span>
-                                    <DropdownInput
-                                        className="[&>button]:min-w-0 w-auto"
-                                        options={outputDisplayOptions.map(option => {
-                                            if (option.id === outputDisplay[1]) {
-                                                    return {
+                                        <DropdownInput
+                                            className="[&>button]:min-w-0 w-auto"
+                                            options={outputDisplayOptions.map(option => {
+                                                if (option.id === outputDisplay[1]) {
+                                                return {
                                                         ...option,
                                                         disabled: true
-                                                    }
+                                                }
                                                 }
                                                 return option
                                             })
@@ -574,10 +578,10 @@ export default function InverseDesignPage() {
                                         className="[&>button]:min-w-0 w-auto"
                                         options={outputDisplayOptions.map(option => {
                                             if (option.id === outputDisplay[0]) {
-                                                    return {
-                                                        ...option,
-                                                        disabled: true
-                                                    }
+                                                return {
+                                                    ...option,
+                                                    disabled: true
+                                                }
                                                 }
                                                 return option
                                             })
@@ -625,7 +629,7 @@ export default function InverseDesignPage() {
                                     font: {
                                         family: 'var(--font-inter), sans-serif',
                                         size: 16
-                                    }
+                                    }   
                                 },
                                 tickfont: {
                                     family: 'var(--font-inter), sans-serif',

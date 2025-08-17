@@ -11,7 +11,8 @@ interface Props {
     onChange?: (value: number[]) => void;
 }
 const NumericalInputSelector = ({ label, disabled = false, currMin = 0, currMax = 100, min = 0, max = 100, onChange }: Props) => {
-    const stepSize =  10 ** (Math.round(Math.log10(max - min))-2)
+    // const stepSize =  10 ** (Math.round(Math.log10(max - min))-2)
+    const stepSize =  0.01
     return (
         <Flex gap="small" vertical className="grow">
             <span className="whitespace-nowrap font-bold">{label}</span>
