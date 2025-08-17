@@ -289,7 +289,7 @@ export default function InverseDesignPage() {
         <Table
             columns={expandColumns.current.map(column => ({
                 ...column,
-                render: (val) => <span key={column.key}>{isNaN(val) ? val : val.toFixed(2) }</span>
+                render: (val) => <span key={column.key}> {typeof val === 'number' && !isNaN(val) ? val.toFixed(2) : val}</span>
             }))}
             dataSource={[expandDataSource.current.find(data => data.key === record.key) || {}]}
             pagination={false}
