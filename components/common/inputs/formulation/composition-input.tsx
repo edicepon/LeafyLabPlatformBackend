@@ -133,48 +133,50 @@ function CompositionInput({ title = "", removeCompositionIndicator = false }: { 
 
     return (
         <div className="grid sm:grid-cols-6 px-5 py-4 items-center">
-                <div className="flex flex-col h-full relative justify-center">
-                    <div className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-3 sm:mb-0 flex items-center gap-2">
+                <div className="flex flex-col h-full relative">
+                    <div className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-2 sm:mb-0 mt-8">
                         {title || "Formulation"}
-                        {(() => {
-                            if (removeCompositionIndicator) return null;
-                            const total = segments.reduce((sum, segment) => sum + segment.value, 0);
-                            if (total > 100 || total < 100) {
-                                return (
-                                    <div className="group relative">
-                                        <AlertCircle className="w-4 h-4 text-red-500 dark:text-red-400" />
-                                        <div className="z-[1] absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-2 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                                            Sum of selected formulation parameters should be 100%
-                                        </div>
-                                    </div>
-                                );
-                            } else {
-                                return (
-                                    <div className="group relative">
-                                        <svg className="w-4 h-4 text-green-500 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        <div className="z-[1] absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-2 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                                            Great! Sum of selected formulation parameters is 100%
-                                        </div>
-                                    </div>
-                                );
-                            }
-                        })()}
-                    </div>
-                <div className="text-xs [&_span]:block absolute bottom-0 right-0">
-                        <span>MXene: Ti₃C₂Tₓ MXene</span>
-                        <span>SWNT: Single-Walled Carbon Nanotube</span>
-                        <span>AuNP: Gold Nanoparticle</span>
-                        <span>PVA: Polyvinyl Alcohol</span>
-                        <span>UL: Upper Limit (wt. %)</span>
-                        <span>LL: Lower Limit (wt. %)</span>
                     </div>
                 </div>
-            <div className="px-5 py-1 col-span-4 xl:col-span-5 ">
-                <div className="flex flex-row flex-wrap gap-4">
+            <div className="px-5 py-1 col-span-4 xl:col-span-5 relative">
+                <div className="flex flex-row flex-wrap gap-4 items-start">
                     {renderedSegments}
                 </div>
+                {/* Grey text positioned to the right of the material inputs, moved down to center with boxes */}
+                <div className="absolute -right-20 top-8 text-xs text-gray-500 dark:text-gray-400 [&_span]:block min-w-[180px] max-w-[180px]">
+                    <span>MXene: Ti₃C₂Tₓ MXene</span>
+                    <span>SWNT: Single-Walled Carbon Nanotube</span>
+                    <span>AuNP: Gold Nanoparticle</span>
+                    <span>PVA: Polyvinyl Alcohol</span>
+                    <span>UL: Upper Limit (wt. %)</span>
+                    <span>LL: Lower Limit (wt. %)</span>
+                </div>
+                {/* Validation text moved below the material input boxes */}
+                {(() => {
+                    if (removeCompositionIndicator) return null;
+                    const total = segments.reduce((sum, segment) => sum + segment.value, 0);
+                    if (total > 100 || total < 100) {
+                        return (
+                            <div className="flex items-center gap-2 mt-4 ml-2">
+                                <AlertCircle className="w-4 h-4 text-red-500 dark:text-red-400" />
+                                <span className="text-xs text-red-600 dark:text-red-400">
+                                    Sum of selected formulation parameters should be 100%
+                                </span>
+                            </div>
+                        );
+                    } else {
+                        return (
+                            <div className="flex items-center gap-2 mt-4 ml-2">
+                                <svg className="w-4 h-4 text-green-500 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span className="text-xs text-green-600 dark:text-green-400">
+                                    Great! Sum of selected formulation parameters is 100%
+                                </span>
+                            </div>
+                        );
+                    }
+                })()}
             </div>
         </div>
     )

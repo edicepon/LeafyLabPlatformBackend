@@ -190,7 +190,17 @@ export default function InverseDesignPage() {
                 columns = Object.keys(predictions).map((key: string) => ({
                     title: key === '_uncertainty' ? 'Model Uncertainty' : key,
                     dataIndex: key,
-                    render: (text, record) => <span key={record.key}>{isNaN(text) ? text : text.toFixed(2) }</span>
+                    render: (text, record) => {
+                        if (isNaN(text)) return <span key={record.key}>{text}</span>
+                        
+                        // Display specific parameters as integers
+                        if (key === 'Applied Pre-Strain (%)' || key === 'Thickness (nm)') {
+                            return <span key={record.key}>{Math.round(text)}</span>
+                        }
+                        
+                        // Display other numeric values with 2 decimal places
+                        return <span key={record.key}>{text.toFixed(2)}</span>
+                    }
                 }))
             }
             if (expandColumns.current.length === 0) {
@@ -291,7 +301,22 @@ export default function InverseDesignPage() {
             title: 'Actions',
             dataIndex: 'action',
             render: (_: any, record: any, index: number) => {
-                const searchParams = new URLSearchParams(expandDataSource.current[index])
+                const rawData = expandDataSource.current[index]
+                // Create a copy with formatted values that match the display
+                const formattedData = { ...rawData }
+                
+                // Apply the same formatting logic for specific parameters
+                Object.keys(formattedData).forEach(key => {
+                    const value = formattedData[key]
+                    if (typeof value === 'number' && !isNaN(value)) {
+                        if (key === 'Applied Pre-Strain (%)' || key === 'Thickness (nm)') {
+                            formattedData[key] = Math.round(value)
+                        }
+                        // Other numeric values keep their original precision
+                    }
+                })
+                
+                const searchParams = new URLSearchParams(formattedData)
                 searchParams.delete('key') // remove key from search params
                 const searchParamsString = searchParams.toString()
                 return (
