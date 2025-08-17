@@ -12,41 +12,58 @@ import { Link } from '@/lib/types/Link'
 import ExpandCollapseIcon from '../icons/expand-collapse'
 import ArrowLeft from '../icons/arrow-left'
 import ChevronDownIcon from '../icons/chevron-down'
-import { Home, Database, Settings, View, Bug } from 'lucide-react'
+import { Home, Database, Share2, RotateCcw, Settings2,Settings, View, Bug } from 'lucide-react'
 
 const links: Link[] = [
+  // {
+  //   text: "Platform Overview",
+  //   href: "/overview",
+  //   icon: <Home size={16} />
+  // },
+  // {
+  //   text: "Data Organization Tab",
+  //   href: "/data",
+  //   icon: <Database size={16} />
+  // },
+
   {
     text: "Platform Overview",
-    href: "/overview",
+    href: "/predictor/overview",
     icon: <Home size={16} />
   },
   {
-    text: "Data Organization Tab",
-    href: "/data",
-    icon: <Database size={16} />
+    text: "Forward Prediction",
+    href: "/views/direct-prediction",
+    icon: <Share2 size={16} />
   },
 
-
   {
-    text: "Predictor Module",
-    href: "/materials",
-    icon: <View size={16} />,
-    children: [
-      { text: "Overview", href: "/predictor/overview", icon: null },
-      { text: "Single-Point Property Prediction", href: "/views/direct-prediction", icon: null },
-      { text: "Heatmap and Sensitivity Analysis", href: "/views/heatmap", icon: null },
-      { text: "Inverse Design Engine", href: "/views/design", icon: null },
-      { text: "Data Analytics View", href: "/views/data-analytics", icon: null },
-    ]
-  },
-  {
-    text: "Settings",
-    href: "/settings",
-    icon: <Settings size={16} />,
-    children: [
-      { text: "Users", href: "/settings/users", icon: null }
-    ]
+    text: "Inverse Design",
+    href: "/views/design",
+    icon: <RotateCcw size={16} />
   }
+
+
+  // {
+  //   text: "Predictor Module",
+  //   href: "/materials",
+  //   icon: <View size={16} />,
+  //   children: [
+  //     { text: "Overview", href: "/predictor/overview", icon: null },
+  //     { text: "Single-Point Property Prediction", href: "/views/direct-prediction", icon: null },
+  //     { text: "Heatmap and Sensitivity Analysis", href: "/views/heatmap", icon: null },
+  //     { text: "Inverse Design Engine", href: "/views/design", icon: null },
+  //     { text: "Data Analytics View", href: "/views/data-analytics", icon: null },
+  //   ]
+  // }
+  // {
+  //   text: "Settings",
+  //   href: "/settings",
+  //   icon: <Settings size={16} />,
+  //   children: [
+  //     { text: "Users", href: "/settings/users", icon: null }
+  //   ]
+  // }
 ]
 
 export default function Sidebar({
