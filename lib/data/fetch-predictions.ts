@@ -2,7 +2,8 @@ import axios from 'axios'
 
 export const fetchPredictions = async (inputs: any): Promise<any> => {
     try {
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/generate/predictions`, {
+        // const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/generate/predictions`, {
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_LOCAL_URL}/generate/predictions`, {
             project_id: "p5",
             model_id: "v1124",
             data: {

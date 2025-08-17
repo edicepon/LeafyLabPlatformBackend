@@ -2,7 +2,8 @@ import axios from 'axios'
 
 export const fetchCluster = async (inputs: any): Promise<any> => {
     try {
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/query/samples`, {
+        //const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/query/samples`, {
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_LOCAL_URL}/query/samples`, {
             project_id: "p5",
             model_id: "v1124",
             inputs: {

@@ -14,6 +14,12 @@ export type CategoricalFeature = {
     options: string[]
 }
 
+export type BooleanFeature = {
+    type: "bool",
+    featureKey: string,
+    label: string
+}
+
 export type FormulationFeature = 
 | NumericalFeature
 
