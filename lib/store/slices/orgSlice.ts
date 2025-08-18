@@ -17,7 +17,12 @@ export const refreshOrg = createAsyncThunk(
     `${ORG_SLICE_NAME}/refreshOrg`,
     async (_, {rejectWithValue}) => {
         try {
-            return fetchOrganization()
+            const result = await fetchOrganization()
+            // If no organization data (user not authenticated), return null
+            if (!result) {
+                return null
+            }
+            return result
         } catch (error) {
             return rejectWithValue(error instanceof Error ? error.message : 'Error fetching organization')
         }
@@ -30,8 +35,14 @@ export const orgSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(refreshOrg.fulfilled, (state, action) => {
-            state.name = action.payload.name
-            state.members = [...action.payload.members]
+            if (action.payload) {
+                state.name = action.payload.name
+                state.members = [...action.payload.members]
+            } else {
+                // No organization data (user not authenticated)
+                state.name = null
+                state.members = []
+            }
         })
         .addCase(refreshOrg.rejected, (state, action) => {
             state.name = NULL_ORG

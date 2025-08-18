@@ -23,7 +23,12 @@ export const refreshProfile = createAsyncThunk(
     async (_,  {rejectWithValue }) => {
     
     try {
-        return fetchProfile()
+        const result = await fetchProfile()
+        // If no profile data (user not authenticated), return null
+        if (!result) {
+            return null
+        }
+        return result
     } catch (error) {
         return rejectWithValue(error instanceof Error ? error.message : 'Error fetching profile')
     }
@@ -41,11 +46,20 @@ export const profileSlice = createSlice({
     extraReducers: (builder) => {
         builder
         .addCase(refreshProfile.fulfilled, (state, action) => {
-            state.id = action.payload.id;
-            state.org_id = action.payload.org_id;
-            state.role = action.payload.role;
-            state.name = action.payload.name;
-            state.email = action.payload.email || null;
+            if (action.payload) {
+                state.id = action.payload.id;
+                state.org_id = action.payload.org_id;
+                state.role = action.payload.role;
+                state.name = action.payload.name;
+                state.email = action.payload.email || null;
+            } else {
+                // No profile data (user not authenticated)
+                state.id = null;
+                state.org_id = null;
+                state.role = null;
+                state.name = null;
+                state.email = null;
+            }
         })
         .addCase(refreshProfile.rejected, (state, action) => {
             state.id = null;

@@ -8,6 +8,11 @@ export async function fetchInvites() {
     const supabase = await createClient()
     const user = await getUserServer()
 
+    // If no user is authenticated, return empty array
+    if (!user) {
+        return []
+    }
+
     const {data: invites, error: invitesError} = await supabase
     .from('invites')
     .select(`

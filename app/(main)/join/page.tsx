@@ -18,8 +18,13 @@ export default function Join() {
 
     useEffect(() => {
         const getInvites = async () => {
-            const invites = await fetchInvites()
-            setInvites(invites)
+            try {
+                const invites = await fetchInvites()
+                setInvites(invites)
+            } catch (error) {
+                // If there's an error fetching invites (e.g., user not authenticated), set empty array
+                setInvites([])
+            }
         }
         getInvites()
     }, [])
@@ -50,8 +55,10 @@ export default function Join() {
     
                     {/*Start*/}
                     {
-                        orgName !== NULL_ORG ? (
+                        orgName && orgName !== NULL_ORG ? (
                             <Header text="You are already a member of a team." description={orgName ?? ''}/>  
+                        ) : orgName === null ? (
+                            <Header text="Welcome to LeafyLab Predictor" description="Sign in to access team features or explore the platform as a guest."/>
                         ) : (
                             <Header text="You are not a member of any team." description="Join a team to get started."/>
                         )
@@ -62,7 +69,9 @@ export default function Join() {
                         invites.length > 0 ? (
                             <Table columns={columns} rows={invites}/>
                         ) : (
-                            <div className="text-center text-gray-500">No invites found.</div>
+                            <div className="text-center text-gray-500">
+                                {orgName === null ? "Sign in to view your team invitations." : "No invites found."}
+                            </div>
                         )
                     }
                     

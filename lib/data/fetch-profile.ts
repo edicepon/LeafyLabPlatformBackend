@@ -7,6 +7,11 @@ export async function fetchProfile(){
     const supabase = await createClient()
     const user = await getUserServer()
 
+    // If no user is authenticated, return null
+    if (!user) {
+        return null
+    }
+
     const {data, error} = await supabase
       .from('profiles')
       .select('id, org_id, role, name, email')

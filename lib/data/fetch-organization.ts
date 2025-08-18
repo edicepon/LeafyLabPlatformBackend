@@ -7,6 +7,11 @@ export async function fetchOrganization() {
     const supabase = await createClient()
     const user = await getUserServer()
 
+    // If no user is authenticated, return null
+    if (!user) {
+        return null
+    }
+
     // fetch org_id of current user
     const { data: profileData, error: profileError } = await supabase
         .from('profiles')

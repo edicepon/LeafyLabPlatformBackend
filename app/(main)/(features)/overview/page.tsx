@@ -2,18 +2,10 @@ import Container from "@/components/common/container";
 import NumericalInput from "@/components/common/inputs/numerical-input";
 import CategoricalInput from "@/components/common/inputs/categorical-input";
 import FormulationInput from "@/components/common/inputs/formulation/formulation-input";
-import { createClient } from "@/lib/utils/supabase/server";
-import { redirect } from "next/navigation";
 import Header from "@/components/common/header";
 import ProcessInput from "@/components/common/inputs/process/process-input";
 
 export default async function Page() {
-    const supabase = await createClient();
-    const { data, error } = await supabase.auth.getUser();
-    if (error || !data?.user) {
-      redirect('/login')
-    }
-    
     return (
         <Container>
     

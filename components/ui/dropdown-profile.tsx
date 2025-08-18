@@ -28,6 +28,20 @@ export default function DropdownProfile({ align }: {
   const orgName = useAppSelector(orgSlice.selectors.selectName)
   const email = useAppSelector(profileSlice.selectors.selectEmail)
 
+  // If no user is authenticated, show login link
+  if (!name || !email) {
+    return (
+      <div className="flex items-center space-x-3">
+        <Link 
+          href="/login" 
+          className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white transition-colors"
+        >
+          Sign In
+        </Link>
+      </div>
+    )
+  }
+
   return (
     <Menu as="div" className="relative inline-flex">
       <MenuButton className="inline-flex justify-center items-center group">

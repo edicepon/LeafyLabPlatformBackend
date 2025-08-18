@@ -10,6 +10,16 @@ export async function uploadFile(file: File): Promise<ActionResponse> {
     const profile = await fetchProfile()
     const user = await getUserServer()
 
+    // Check if user is authenticated
+    if (!user) {
+        throw new Error("Authentication required for file upload.")
+    }
+
+    // Check if profile exists
+    if (!profile) {
+        throw new Error("User profile not found.")
+    }
+
     const orgId = profile.org_id
     // Trim the file extension from the name
     const fileName = file.name.replace(/\.[^/.]+$/, "");
