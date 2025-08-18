@@ -4,7 +4,7 @@
     "Formulation": [
         {
             "type": "num",
-            "featureKey": "MXene",
+            "featureKey": "MXene (wt.%)",
             "label": "MXene",
             "min": 0,
             "max": 100,
@@ -12,7 +12,7 @@
         },
         {
             "type": "num",
-            "featureKey": "SWNT",
+            "featureKey": "SWNT (wt.%)",
             "label": "SWNT",
             "min": 0,
             "max": 100,
@@ -20,7 +20,7 @@
         }, 
         {
             "type": "num",
-            "featureKey": "AuNP",
+            "featureKey": "AuNP (wt.%)",
             "label": "AuNP",
             "min": 0,
             "max": 100,
@@ -28,7 +28,7 @@
         },
         {
             "type": "num",
-            "featureKey": "PVA",
+            "featureKey": "PVA (wt.%)",
             "label": "PVA",
             "min": 0,
             "max": 100,
@@ -44,13 +44,13 @@
         },
         {
             "type": "cat",
-            "featureKey": "Applied Pre-Strain",
+            "featureKey": "Applied Pre-Strain (%)",
             "label": "Applied Pre-Strain (%)",
             "options": ["0", "100", "200", "300"] 
         },
         {
             "type": "cat",
-            "featureKey": "Thickness",
+            "featureKey": "Thickness (nm)",
             "label": "Thickness (nm)",
             "options": ["800", "1,200","1,600"] 
         }
