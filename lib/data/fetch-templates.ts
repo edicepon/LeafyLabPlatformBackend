@@ -11,7 +11,7 @@ export async function fetchTemplates(): Promise<Template[]> {
 
     // Template files stored in the public directory
     const templateFiles = [
-        { id: "82676d1e-075f-45f6-bb52-1c2f172d5458", name: "Property Template", file: "property-template.json" },
+        { id: "82676d1e-075f-45f6-bb52-1c2f172d5458", name: "Stretchable Electrode", file: "property-template.json" },
         // { id: "82676d1e-075f-45f6-bb52-1c2f172d5458", name: "Binder Template", file: "binder-template.json" },
     ]
 
