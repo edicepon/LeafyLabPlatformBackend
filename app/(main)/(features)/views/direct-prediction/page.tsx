@@ -81,11 +81,13 @@ export default function DirectPredictionPage() {
                     dataIndex: key,
                     render: (text, record) => (
                         <span key={record.key}>
-                            {typeof text === 'boolean'
+                            {text === null || text === undefined
+                                ? 'N/A'
+                                : typeof text === 'boolean'
                                 ? (text ? 'True' : 'False')
-                                : isNaN(text) || text === null
-                                    ? 'N/A'
-                                    : text.toFixed(2)}
+                                : typeof text === 'number'
+                                    ? (isNaN(text) ? 'N/A' : text.toFixed(2))
+                                    : text}
                         </span>
                     ),
                 };
