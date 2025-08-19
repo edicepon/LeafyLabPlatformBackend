@@ -7,28 +7,45 @@ import path from "path"
 import { promises as fs } from "fs"
 
 export async function fetchTemplates(): Promise<Template[]> {
-    const templates: Template[] = []
+  const templates: Template[] = [];
 
-    // Template files stored in the public directory
-    const templateFiles = [
-        { id: "82676d1e-075f-45f6-bb52-1c2f172d5458", name: "Stretchable Electrode", file: "property-template.json" },
-        // { id: "82676d1e-075f-45f6-bb52-1c2f172d5458", name: "Binder Template", file: "binder-template.json" },
-    ]
+  // Define your template files (relative to public/)
+  const templateFiles = [
+    {
+      id: "82676d1e-075f-45f6-bb52-1c2f172d5458",
+      name: "Stretchable Electrode",
+      file: "property-template.json", // this should be in your /public/ directory
+    },
+    // Add more templates here if needed
+    // { id: "...", name: "Binder Template", file: "binder-template.json" },
+  ];
 
-    for (const tmpl of templateFiles) {
-        const filePath = path.resolve(process.cwd(), "public", tmpl.file)
-        const fileContent = await fs.readFile(filePath, "utf-8")
-        const json = JSON.parse(fileContent)
-        templates.push({
-            ...json,
-            id: tmpl.id,
-            name: tmpl.name
-        })
+  for (const tmpl of templateFiles) {
+    try {
+      // Use NEXT_PUBLIC_DEPLOY_URL to form absolute URL
+      const baseUrl =
+        process.env.NEXT_PUBLIC_DEPLOY_URL || "http://localhost:3000";
+
+      const res = await fetch(`${baseUrl}/${tmpl.file}`);
+      if (!res.ok) {
+        throw new Error(`Failed to fetch ${tmpl.file}: ${res.statusText}`);
+      }
+
+      const json = await res.json();
+
+      templates.push({
+        ...json,
+        id: tmpl.id,
+        name: tmpl.name,
+      });
+    } catch (error) {
+      console.error(`Error loading template "${tmpl.name}":`, error);
     }
+  }
 
-    // console.log("Fetched templates:", templates);
-    return templates
+  return templates;
 }
+
 
 // export async function fetchTemplates(): Promise<Template[]> {
 //     const supabase = await createClient();
